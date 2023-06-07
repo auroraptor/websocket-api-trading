@@ -3,15 +3,14 @@ import "./index.css";
 import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 
-interface OrderData {
-  key: React.Key;
+export interface OrderData {
   id: string;
   creationTime: string;
   statusUpdateTime: string;
   status: string;
   side: string;
   price: number;
-  volume: number;
+  amount: number;
   instrument: string;
 }
 
@@ -19,7 +18,6 @@ const columns: ColumnsType<OrderData> = [
   {
     title: "ID",
     dataIndex: "id",
-    sorter: (a: OrderData, b: OrderData) => a.id.localeCompare(b.id),
   },
   {
     title: "Creation Time",
@@ -45,7 +43,7 @@ const columns: ColumnsType<OrderData> = [
     sorter: (a: OrderData, b: OrderData) => a.price - b.price,
   },
   {
-    title: "Volume",
+    title: "Amount",
     dataIndex: "volume",
   },
   {
@@ -54,30 +52,25 @@ const columns: ColumnsType<OrderData> = [
   },
 ];
 
-const data: OrderData[] = [
-  {
-    key: "1",
-    id: "1",
-    creationTime: "2023-05-26 12:00:00",
-    statusUpdateTime: "2023-05-26 12:01:00",
-    status: "Active",
-    side: "Buy",
-    price: 100,
-    volume: 1000,
-    instrument: "Instrument 1",
-  },
-  // ...дополнительные заявки...
-];
+interface OrdersTableProps {
+  orders: OrderData[];
+}
 
-const OrdersTable: React.FC = () => (
-  <Table
-    style={{ marginTop: "20px" }}
-    columns={columns}
-    dataSource={data}
-    pagination={{
-      pageSize: 10,
-    }}
-  />
-);
+const OrdersTable: React.FC<OrdersTableProps> = ({ orders }) => {
+  if (!orders) {
+    return <div>Loading...</div>;
+  }
+  console.log("orders: ", orders);
+  return (
+    <Table
+      style={{ marginTop: "20px" }}
+      columns={columns}
+      dataSource={orders}
+      pagination={{
+        pageSize: 9,
+      }}
+    />
+  );
+};
 
 export default OrdersTable;

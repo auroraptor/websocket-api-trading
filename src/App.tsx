@@ -1,13 +1,25 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
+import WSConnector from './WSClient';
 import './App.css';
 import Ticker from './Ticker';
 import OrdersTable from './OrdersTable';
+import { OrderData } from './OrdersTable';
 
 function App() {
+  const [orders, setOrders] = useState<OrderData[]>([]);
+
+  useEffect(() => {
+    const wsConnector = new WSConnector();
+    wsConnector.connect((data: OrderData[]) => {
+      console.log('data: ',data); // data:  undefined
+      setOrders(data);
+    });
+  }, []);
+
   return (
     <div className="App">
       <Ticker/>
-      <OrdersTable />
+      <OrdersTable orders={orders} />
     </div>
   );
 }
