@@ -1,7 +1,14 @@
-import {ClientMessage} from "./Models/ClientMessages";
-import {ClientMessageType, Instrument, OrderSide, ServerMessageType} from "./Enums";
+import { ClientMessage } from "./Models/ClientMessages";
+import {
+  ClientMessageType,
+  Instrument,
+  OrderSide,
+  ServerMessageType,
+} from "./Enums";
 import Decimal from "decimal.js";
-import {ServerEnvelope} from "./Models/ServerMessages";
+import { ServerEnvelope } from "./Models/ServerMessages";
+import { mockServerURL } from "./mocks/MockServer";
+import { OrderData } from "./OrdersTable";
 
 export default class WSConnector {
   connection: WebSocket | undefined;
@@ -10,66 +17,65 @@ export default class WSConnector {
     this.connection = undefined;
   }
 
-  connect = () => {
-    this.connection = new WebSocket('ws://127.0.0.1:3000/ws/');
+  connect = (onMessage: (data: OrderData[]) => void) => {
+    this.connection = new WebSocket(mockServerURL);
     this.connection.onclose = () => {
       this.connection = undefined;
     };
 
-    this.connection.onerror = () => {
+    this.connection.onerror = () => {};
 
-    };
-
-    this.connection.onopen = () => {
-
-    };
+    this.connection.onopen = () => {};
 
     this.connection.onmessage = (event) => {
       const message: ServerEnvelope = JSON.parse(event.data);
+
       switch (message.messageType) {
         case ServerMessageType.success:
-
+          onMessage(message.message.orders);
           break;
         case ServerMessageType.error:
-
           break;
         case ServerMessageType.executionReport:
-
           break;
         case ServerMessageType.marketDataUpdate:
-
           break;
       }
     };
-  }
+  };
 
   disconnect = () => {
     this.connection?.close();
-  }
+  };
 
   send = (message: ClientMessage) => {
     this.connection?.send(JSON.stringify(message));
-  }
+  };
 
   subscribeMarketData = (instrument: Instrument) => {
     this.send({
       messageType: ClientMessageType.subscribeMarketData,
       message: {
         instrument,
-      }
+      },
     });
-  }
+  };
 
   unsubscribeMarketData = (subscriptionId: string) => {
     this.send({
       messageType: ClientMessageType.unsubscribeMarketData,
       message: {
         subscriptionId,
-      }
+      },
     });
-  }
+  };
 
-  placeOrder = (instrument: Instrument, side: OrderSide, amount: Decimal, price: Decimal) => {
+  placeOrder = (
+    instrument: Instrument,
+    side: OrderSide,
+    amount: Decimal,
+    price: Decimal
+  ) => {
     this.send({
       messageType: ClientMessageType.placeOrder,
       message: {
@@ -77,7 +83,7 @@ export default class WSConnector {
         side,
         amount,
         price,
-      }
+      },
     });
-  }
+  };
 }
