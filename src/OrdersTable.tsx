@@ -44,7 +44,7 @@ const columns: ColumnsType<OrderData> = [
   },
   {
     title: "Amount",
-    dataIndex: "volume",
+    dataIndex: "amount",
   },
   {
     title: "Instrument",
