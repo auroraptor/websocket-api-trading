@@ -11,14 +11,13 @@ function App() {
   useEffect(() => {
     const wsConnector = new WSConnector();
     wsConnector.connect((data: OrderData[]) => {
-      console.log('data: ',data); // data:  undefined
       setOrders(data);
     });
   }, []);
 
   return (
     <div className="App">
-      <Ticker/>
+      <Ticker orders={orders} onOrderSubmit={(a) => console.log('App get: ', a)}/>
       <OrdersTable orders={orders} />
     </div>
   );
