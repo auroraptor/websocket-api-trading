@@ -10,14 +10,30 @@ import { PlaceOrder } from "./Models/ClientMessages";
 function App() {
   const [orders, setOrders] = useState<OrderData[]>([]);
   const [wsConnector, setWsConnector] = useState<WSConnector | null>(null);
+  const [tickerPrices, setTickerPrices] = useState<Record<string, { bid: Decimal, offer: Decimal, minAmount: Decimal, maxAmount: Decimal }>>({});
 
   useEffect(() => {
     const connector = new WSConnector();
     setWsConnector(connector);
-    connector.connect((data: OrderData[]) => {
-      setOrders(data);
-    });
-  }, []);
+    connector.connect(
+      (data: OrderData[]) => {
+        setOrders(data);
+      },
+      (marketUpdate: any) => { 
+        for (let instrument in marketUpdate) {
+          if (marketUpdate.hasOwnProperty(instrument)) {
+            let quote = marketUpdate[instrument];
+            if (quote && quote.bid && quote.offer) {
+              setTickerPrices(prevState => ({
+                ...prevState,
+                [instrument]: quote
+              }));
+            }
+          }
+        }
+      }
+    );
+  }, []);  
 
   const handleOrderSubmit = (order:PlaceOrder) => {
     if(wsConnector) {
@@ -27,7 +43,7 @@ function App() {
 
   return (
     <div className="App">
-      <Ticker price={new Decimal(1000)} onOrderSubmit={handleOrderSubmit} />
+      <Ticker tickerPrices={tickerPrices} onOrderSubmit={handleOrderSubmit} />
       <OrdersTable orders={orders} />
     </div>
   );
