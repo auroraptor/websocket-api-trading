@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { PlaceOrder } from "./Models/ClientMessages";
 import { OrderSide, Instrument } from "./Enums";
 import Decimal from "decimal.js";
@@ -16,17 +16,35 @@ import {
 const { Text } = Typography;
 
 type TickerProps = {
-  price: Decimal;
+  tickerPrices: Record<
+    string,
+    { bid: Decimal; offer: Decimal; minAmount: Decimal; maxAmount: Decimal }
+  >;
   onOrderSubmit: (order: PlaceOrder) => void;
 };
 
-const Ticker: React.FC<TickerProps> = ({ price, onOrderSubmit }) => {
-  const defaultVolume = 1000;
-  const [volume, setVolume] = useState<number>(defaultVolume);
-  const [value, setValue] = useState<string>();
-  let sellPrice = price.times(0.95).toNumber(); // уменьшаем цену на 5% для продажи
-  let buyPrice = price.times(1.05).toNumber(); // увеличиваем цену на 5% для покупки
+const Ticker: React.FC<TickerProps> = ({ tickerPrices, onOrderSubmit }) => {
+  const [currentInstrument, setСurrentInstrument] = useState<string>();
+  let selectedInstrument = currentInstrument
+    ? tickerPrices[currentInstrument]
+    : undefined;
+  let sellPrice = selectedInstrument
+    ? new Decimal(selectedInstrument.bid).toNumber()
+    : 0;
+  let buyPrice = selectedInstrument
+    ? new Decimal(selectedInstrument.offer).toNumber()
+    : 0;
+  let defaultVolume = selectedInstrument
+    ? new Decimal(selectedInstrument.minAmount).toNumber()
+    : 0;
+  let minAmount = selectedInstrument
+    ? new Decimal(selectedInstrument.minAmount).toNumber()
+    : 0;
+  let maxAmount = selectedInstrument
+    ? new Decimal(selectedInstrument.maxAmount).toNumber()
+    : 1000000;
 
+  const [volume, setVolume] = useState<number>(defaultVolume);
   const instruments = Object.keys(Instrument)
     .filter((key) => isNaN(Number(key)))
     .map((instrument) => ({
@@ -34,21 +52,28 @@ const Ticker: React.FC<TickerProps> = ({ price, onOrderSubmit }) => {
       label: instrument.toUpperCase().replace("_", "/"),
     }));
 
-  const options = useMemo(() => instruments, []);
+  useEffect(() => {
+    if (!currentInstrument && instruments && instruments.length > 0) {
+      setСurrentInstrument(instruments[0].value);
+    }
+  }, [currentInstrument, instruments]);
 
   useEffect(() => {
-    if (!value && options.length > 0) {
-      setValue(options[0].value);
+    if (selectedInstrument) {
+      setVolume(new Decimal(selectedInstrument.minAmount).toNumber());
     }
-  }, [value, options]);
+  }, [selectedInstrument]);
 
   const handleOrderSubmit = (side: OrderSide) => {
-    if (value) {
+    if (currentInstrument) {
       onOrderSubmit({
-        instrument: Instrument[value as keyof typeof Instrument],
+        instrument: Instrument[currentInstrument as keyof typeof Instrument],
         side: side,
         amount: new Decimal(volume),
-        price: price,
+        price:
+          side === OrderSide.sell
+            ? new Decimal(sellPrice)
+            : new Decimal(buyPrice),
       });
     }
   };
@@ -61,7 +86,7 @@ const Ticker: React.FC<TickerProps> = ({ price, onOrderSubmit }) => {
           type="primary"
           block
           size="large"
-          style={{ width: "80%", background: "#E74C3C" }}
+          style={{ width: "80%", background: "#cf1322" }}
           onClick={() => handleOrderSubmit(OrderSide.sell)}
         >
           Sell
@@ -70,7 +95,7 @@ const Ticker: React.FC<TickerProps> = ({ price, onOrderSubmit }) => {
           type="primary"
           block
           size="large"
-          style={{ width: "80%", background: "#3CB371" }}
+          style={{ width: "80%", background: "#389e0d" }}
           onClick={() => handleOrderSubmit(OrderSide.buy)}
         >
           Buy
@@ -79,16 +104,16 @@ const Ticker: React.FC<TickerProps> = ({ price, onOrderSubmit }) => {
     >
       <Select
         style={{ width: "100%", margin: "10px 0" }}
-        value={value}
+        value={currentInstrument}
         size="large"
         dropdownStyle={{ maxHeight: 400, overflow: "auto" }}
-        options={options}
-        onChange={(newValue: string) => setValue(newValue)}
+        options={instruments}
+        onChange={(newValue: string) => setСurrentInstrument(newValue)}
       />
       <InputNumber
         style={{ width: "100%", margin: "10px 0", textAlign: "center" }}
-        min={1000}
-        max={1000000}
+        min={minAmount}
+        max={maxAmount}
         step={1000}
         size="large"
         value={volume}
