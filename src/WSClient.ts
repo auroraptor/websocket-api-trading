@@ -6,7 +6,11 @@ import {
   ServerMessageType,
 } from "./Enums";
 import Decimal from "decimal.js";
-import { ServerEnvelope } from "./Models/ServerMessages";
+import {
+  ServerEnvelope,
+  OrderDataMessage,
+  MarketDataUpdate,
+} from "./Models/ServerMessages";
 import { mockServerURL } from "./mocks/MockServer";
 import { OrderData } from "./OrdersTable";
 
@@ -17,7 +21,10 @@ export default class WSConnector {
     this.connection = undefined;
   }
 
-  connect = (onMessage: (data: OrderData[]) => void) => {
+  connect = (
+    onMessage: (data: OrderData[]) => void,
+    onPriceUpdate: (marketUpdate: MarketDataUpdate) => void
+  ) => {
     this.connection = new WebSocket(mockServerURL);
     this.connection.onclose = () => {
       this.connection = undefined;
@@ -32,14 +39,17 @@ export default class WSConnector {
 
       switch (message.messageType) {
         case ServerMessageType.success:
-          onMessage(message.message.orders);
+          const orderMessage = message.message as OrderDataMessage;
+          onMessage(orderMessage.orders);
           break;
         case ServerMessageType.error:
           break;
         case ServerMessageType.executionReport:
           break;
-        case ServerMessageType.marketDataUpdate:
-          break;
+          case ServerMessageType.marketDataUpdate:
+            const marketUpdateMessage = message.message as MarketDataUpdate;
+            onPriceUpdate(marketUpdateMessage);
+            break;
       }
     };
   };
