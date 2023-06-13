@@ -95,7 +95,7 @@ const columns: ColumnsType<OrderData> = [
     sorter: (a: OrderData, b: OrderData) =>
       new Decimal(a.price).cmp(new Decimal(b.price)),
     render: (price: Decimal, record: OrderData) => (
-      <div style={{ color: record.side === OrderSide.sell ? "red" : "green" }}>
+      <div style={{ color: record.side === OrderSide.sell ? "#cf1322" : "#389e0d" }}>
         {price.toString()}
       </div>
     ),
@@ -106,7 +106,7 @@ const columns: ColumnsType<OrderData> = [
     sorter: (a: OrderData, b: OrderData) =>
       new Decimal(a.amount).cmp(new Decimal(b.amount)),
     render: (amount: Decimal, record: OrderData) => (
-      <div style={{ color: record.side === OrderSide.sell ? "red" : "green" }}>
+      <div style={{ color: record.side === OrderSide.sell ? "#cf1322" : "#389e0d" }}>
         {amount.toString()}
       </div>
     ),
@@ -134,7 +134,7 @@ const OrdersTable: React.FC<OrdersTableProps> = ({ orders }) => {
     <Table
       style={{ marginTop: "20px" }}
       columns={columns}
-      dataSource={orders}
+      dataSource={orders.sort((a, b) => b.creationTime.localeCompare(a.creationTime))}
       pagination={{
         pageSize: 9,
       }}
