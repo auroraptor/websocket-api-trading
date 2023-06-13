@@ -1,6 +1,8 @@
 import { Server } from "mock-socket";
 import { ServerMessageType, OrderStatus } from "../Enums";
 import { mockData } from "./MockData";
+import { mockTickerPrices } from "./mockTickerPrices";
+import Decimal from "decimal.js";
 
 export const mockServerURL = "ws://localhost:8080";
 
@@ -16,6 +18,27 @@ mockServer.on("connection", (socket) => {
     },
   };
   socket.send(JSON.stringify(message));
+
+  function randomizePrices() {
+    for (let key in mockTickerPrices) {
+      const quote = mockTickerPrices[key];
+      quote.bid = quote.bid.plus(new Decimal(Math.random() * 0.01 - 0.005).toDP(5));
+      quote.offer = quote.offer.plus(new Decimal(Math.random() * 0.01 - 0.005).toDP(5));
+    }
+    
+    const tickerUpdate = {
+      messageType: ServerMessageType.marketDataUpdate,
+      message: mockTickerPrices,
+    };
+    
+    socket.send(JSON.stringify(tickerUpdate));
+  }
+
+  const intervalId = setInterval(randomizePrices, 5000);
+
+  socket.on("close", () => {
+    clearInterval(intervalId);
+  });
 
   socket.on("message", (data: any) => {
     try {
