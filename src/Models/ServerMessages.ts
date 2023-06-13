@@ -1,5 +1,6 @@
 import {Instrument, OrderStatus} from "../Enums";
 import {Envelope, Message, Quote} from "./Base";
+import { OrderData } from "../OrdersTable";
 
 export interface ServerEnvelope extends Envelope {
     messageType: ServerMessage
@@ -22,6 +23,9 @@ export interface ExecutionReport extends ServerMessage {
     orderStatus: OrderStatus
 }
 
+export interface OrderDataMessage extends Message {
+    orders: OrderData[]
+}
 export interface MarketDataUpdate extends ServerMessage {
     subscriptionId: string
     instrument: Instrument

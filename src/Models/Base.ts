@@ -1,11 +1,10 @@
 import Decimal from "decimal.js";
 import {ClientMessage} from "./ClientMessages";
 import {ServerMessage} from "./ServerMessages";
-import { OrderData } from "../OrdersTable";
 
 export interface Envelope {
     messageType: ClientMessage | ServerMessage
-    message: { orders: OrderData[] }
+    message: Message
 }
 
 export interface Message {
