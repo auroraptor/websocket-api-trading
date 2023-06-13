@@ -24,6 +24,7 @@ type TickerProps = {
 };
 
 const Ticker: React.FC<TickerProps> = ({ tickerPrices, onOrderSubmit }) => {
+  const [loading, setLoading] = useState(true);
   const [currentInstrument, setСurrentInstrument] = useState<string>();
   let selectedInstrument = currentInstrument
     ? tickerPrices[currentInstrument]
@@ -59,6 +60,10 @@ const Ticker: React.FC<TickerProps> = ({ tickerPrices, onOrderSubmit }) => {
   }, [currentInstrument, instruments]);
 
   useEffect(() => {
+    if (sellPrice && buyPrice) setLoading(false);
+  }, [sellPrice, buyPrice])
+
+  useEffect(() => {
     if (selectedInstrument) {
       setVolume(new Decimal(selectedInstrument.minAmount).toNumber());
     }
@@ -80,12 +85,14 @@ const Ticker: React.FC<TickerProps> = ({ tickerPrices, onOrderSubmit }) => {
 
   return (
     <Card
-      style={{ width: 300 }}
+      loading={loading}
+      style={{ width: 300, margin: 30 }}
       actions={[
         <Button
           type="primary"
           block
           size="large"
+          disabled={loading}
           style={{ width: "80%", background: "#cf1322" }}
           onClick={() => handleOrderSubmit(OrderSide.sell)}
         >
@@ -95,6 +102,7 @@ const Ticker: React.FC<TickerProps> = ({ tickerPrices, onOrderSubmit }) => {
           type="primary"
           block
           size="large"
+          disabled={loading}
           style={{ width: "80%", background: "#389e0d" }}
           onClick={() => handleOrderSubmit(OrderSide.buy)}
         >
