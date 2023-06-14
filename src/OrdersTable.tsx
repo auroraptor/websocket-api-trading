@@ -122,7 +122,7 @@ const columns: ColumnsType<OrderData> = [
 ];
 
 interface OrdersTableProps {
-  orders: OrderData[];
+  orders?: OrderData[];
 }
 
 const OrdersTable: React.FC<OrdersTableProps> = ({ orders }) => {
@@ -133,6 +133,7 @@ const OrdersTable: React.FC<OrdersTableProps> = ({ orders }) => {
   return (
     <Table
       style={{ marginTop: "20px" }}
+      rowKey={record => record.id}
       columns={columns}
       dataSource={orders.sort((a, b) => b.creationTime.localeCompare(a.creationTime))}
       pagination={{
