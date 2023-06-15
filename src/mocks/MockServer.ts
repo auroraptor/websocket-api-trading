@@ -1,14 +1,14 @@
 import { Server } from "mock-socket";
 import { ServerMessageType, OrderStatus } from "../Enums";
-import { mockData } from "./MockData";
-import { mockTickerPrices } from "./mockTickerPrices";
+import { MockData } from "./MockData";
+import { MockTickerPrices } from "./MockTickerPrices";
 import Decimal from "decimal.js";
 
 export const mockServerURL = "ws://localhost:8080";
 
 const mockServer = new Server(mockServerURL);
 
-let orders = [...mockData];
+let orders = [...MockData];
 
 mockServer.on("connection", (socket) => {
   const message = {
@@ -20,15 +20,15 @@ mockServer.on("connection", (socket) => {
   socket.send(JSON.stringify(message));
 
   function randomizePrices() {
-    for (let key in mockTickerPrices) {
-      const quote = mockTickerPrices[key];
+    for (let key in MockTickerPrices) {
+      const quote = MockTickerPrices[key];
       quote.bid = quote.bid.plus(new Decimal(Math.random() * 0.01 - 0.005).toDP(5));
       quote.offer = quote.offer.plus(new Decimal(Math.random() * 0.01 - 0.005).toDP(5));
     }
     
     const tickerUpdate = {
       messageType: ServerMessageType.marketDataUpdate,
-      message: mockTickerPrices,
+      message: MockTickerPrices,
     };
     
     socket.send(JSON.stringify(tickerUpdate));

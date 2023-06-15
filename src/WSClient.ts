@@ -12,7 +12,7 @@ import {
   MarketDataUpdate,
   OrderData
 } from "./Models/ServerMessages";
-import { mockServerURL } from "./mocks/MockServer";
+import { mockServerURL } from "./Mocks/MockServer";
 
 export default class WSConnector {
   connection: WebSocket | undefined;

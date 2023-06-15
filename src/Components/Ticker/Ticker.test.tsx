@@ -1,20 +1,20 @@
 import "@testing-library/jest-dom";
 import { render, fireEvent, screen } from "@testing-library/react";
-import { mockTickerPrices } from "../../mocks/mockTickerPrices";
+import { MockTickerPrices } from "../../Mocks/MockTickerPrices";
 import { OrderSide, Instrument } from "../../Enums";
 import Decimal from "decimal.js";
 import Ticker from "./Ticker";
 
 describe("Ticker", () => {
   it("renders without error", () => {
-    render(<Ticker tickerPrices={mockTickerPrices} onOrderSubmit={() => {}} />);
+    render(<Ticker tickerPrices={MockTickerPrices} onOrderSubmit={() => {}} />);
   });
 
   it("renders with disabled buttons when loading", () => {
     const mockLoadingTickerPrices = {
-      ...mockTickerPrices,
+      ...MockTickerPrices,
       eur_usd: {
-        ...mockTickerPrices.eur_usd,
+        ...MockTickerPrices.eur_usd,
         bid: new Decimal(0),
         offer: new Decimal(0),
       },
@@ -29,7 +29,7 @@ describe("Ticker", () => {
   describe("instrumentSelect", () => {
     it("selects the first instrument when provided", () => {
       render(
-        <Ticker tickerPrices={mockTickerPrices} onOrderSubmit={() => {}} />
+        <Ticker tickerPrices={MockTickerPrices} onOrderSubmit={() => {}} />
       );
       expect(screen.getByText("EUR/USD")).toBeInTheDocument();
     });
@@ -38,7 +38,7 @@ describe("Ticker", () => {
   describe("amountInput", () => {
     it("changes amount when the value input is changed", () => {
       render(
-        <Ticker tickerPrices={mockTickerPrices} onOrderSubmit={() => {}} />
+        <Ticker tickerPrices={MockTickerPrices} onOrderSubmit={() => {}} />
       );
 
       const input = screen.getByRole("spinbutton");
@@ -54,7 +54,7 @@ describe("Ticker", () => {
     it("calls onOrderSubmit when Buy is clicked", () => {
       render(
         <Ticker
-          tickerPrices={mockTickerPrices}
+          tickerPrices={MockTickerPrices}
           onOrderSubmit={mockOnOrderSubmit}
         />
       );
@@ -68,7 +68,7 @@ describe("Ticker", () => {
     it("passes the correct order when Buy is clicked", () => {
       render(
         <Ticker
-          tickerPrices={mockTickerPrices}
+          tickerPrices={MockTickerPrices}
           onOrderSubmit={mockOnOrderSubmit}
         />
       );
@@ -80,10 +80,10 @@ describe("Ticker", () => {
         instrument: Instrument.eur_usd,
         side: OrderSide.buy,
         amount: new Decimal(
-          mockTickerPrices[Instrument[Instrument.eur_usd]].minAmount
+          MockTickerPrices[Instrument[Instrument.eur_usd]].minAmount
         ),
         price: new Decimal(
-          mockTickerPrices[Instrument[Instrument.eur_usd]].offer
+          MockTickerPrices[Instrument[Instrument.eur_usd]].offer
         ),
       });
     });
@@ -96,7 +96,7 @@ describe("Ticker", () => {
       const mockOnOrderSubmit = jest.fn();
       render(
         <Ticker
-          tickerPrices={mockTickerPrices}
+          tickerPrices={MockTickerPrices}
           onOrderSubmit={mockOnOrderSubmit}
         />
       );
@@ -110,7 +110,7 @@ describe("Ticker", () => {
     it("passes the correct order when Sell is clicked", () => {
       render(
         <Ticker
-          tickerPrices={mockTickerPrices}
+          tickerPrices={MockTickerPrices}
           onOrderSubmit={mockOnOrderSubmit}
         />
       );
@@ -123,10 +123,10 @@ describe("Ticker", () => {
         instrument: Instrument.eur_usd,
         side: OrderSide.sell,
         amount: new Decimal(
-          mockTickerPrices[Instrument[Instrument.eur_usd]].minAmount
+          MockTickerPrices[Instrument[Instrument.eur_usd]].minAmount
         ),
         price: new Decimal(
-          mockTickerPrices[Instrument[Instrument.eur_usd]].bid
+          MockTickerPrices[Instrument[Instrument.eur_usd]].bid
         ),
       });
     });

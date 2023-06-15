@@ -3,8 +3,8 @@ import WSConnector from "../../WSClient";
 import App from "./App";
 import { mockDeep, mockReset, MockProxy } from "jest-mock-extended";
 import { WebSocket } from "mock-socket";
-import { mockData } from "../../mocks/MockData";
-import { mockTickerPrices } from "../../mocks/mockTickerPrices";
+import { MockData } from "../../Mocks/MockData";
+import { MockTickerPrices } from "../../Mocks/MockTickerPrices";
 import { Instrument, OrderSide } from "../../Enums";
 import { PlaceOrder } from "../../Models/ClientMessages";
 import Decimal from "decimal.js";
@@ -39,9 +39,9 @@ describe("App", () => {
 
   it("updates orders and ticker prices state", async () => {
     mockWSConnector.connect.mockImplementation((onMessage, onPriceUpdate) => {
-      onMessage(mockData);
+      onMessage(MockData);
 
-      const mockTickerUpdates = Object.keys(mockTickerPrices).map(
+      const mockTickerUpdates = Object.keys(MockTickerPrices).map(
         (instrument) => ({
           subscriptionId: "mockId",
           instrument: Instrument[instrument as keyof typeof Instrument],
