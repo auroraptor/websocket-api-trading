@@ -1,7 +1,7 @@
 import { OrderSide, OrderStatus, Instrument } from "../Enums";
 import Decimal from "decimal.js";
 
-interface MockData {
+interface OrderMockData {
   id: string;
   creationTime: string;
   statusUpdateTime: string;
@@ -12,7 +12,7 @@ interface MockData {
   price: Decimal;
 }
 
-export const MockData: MockData[] = [
+export const MockData: OrderMockData[] = [
   {
     id: "1686566931600",
     creationTime: "2023-05-26T14:00:00.000Z",
