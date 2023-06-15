@@ -3,7 +3,7 @@ import WSConnector from "./WSClient";
 import "./App.css";
 import Ticker from "./Ticker";
 import OrdersTable from "./OrdersTable";
-import { OrderData } from "./OrdersTable";
+import { OrderData } from "./Models/ServerMessages";
 import Decimal from "decimal.js";
 import { PlaceOrder } from "./Models/ClientMessages";
 

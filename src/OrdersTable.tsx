@@ -4,17 +4,7 @@ import { Table, Tag, Badge } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import Decimal from "decimal.js";
 import { Instrument, OrderSide, OrderStatus } from "./Enums";
-
-export interface OrderData {
-  id: string;
-  creationTime: string;
-  statusUpdateTime: string;
-  status: OrderStatus;
-  side: OrderSide;
-  price: Decimal;
-  amount: Decimal;
-  instrument: Instrument;
-}
+import { OrderData } from "./Models/ServerMessages";
 
 const columns: ColumnsType<OrderData> = [
   {
