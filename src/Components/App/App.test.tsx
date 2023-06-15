@@ -1,15 +1,15 @@
 import { render } from "@testing-library/react";
-import WSConnector from "./WSClient";
+import WSConnector from "../../WSClient";
 import App from "./App";
 import { mockDeep, mockReset, MockProxy } from "jest-mock-extended";
 import { WebSocket } from "mock-socket";
-import { mockData } from "./mocks/MockData";
-import { mockTickerPrices } from "./mocks/mockTickerPrices";
-import { Instrument, OrderSide } from "./Enums";
-import { PlaceOrder } from "./Models/ClientMessages";
+import { mockData } from "../../mocks/MockData";
+import { mockTickerPrices } from "../../mocks/mockTickerPrices";
+import { Instrument, OrderSide } from "../../Enums";
+import { PlaceOrder } from "../../Models/ClientMessages";
 import Decimal from "decimal.js";
 
-jest.mock("./WSClient");
+jest.mock("../../WSClient");
 
 describe("App", () => {
   let mockWS: MockProxy<WebSocket> & WebSocket;

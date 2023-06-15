@@ -1,8 +1,8 @@
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 import OrdersTable from './OrdersTable';
-import { OrderStatus, OrderSide, Instrument } from './Enums';
-import { OrderData } from './OrdersTable';
+import { OrderStatus, OrderSide, Instrument } from '../../Enums';
+import { OrderData } from '../../Models/ServerMessages';
 import Decimal from 'decimal.js';
 
 test('renders loading state when orders prop is not provided', () => {

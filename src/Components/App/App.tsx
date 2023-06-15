@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
-import WSConnector from "./WSClient";
-import "./App.css";
-import Ticker from "./Ticker";
-import OrdersTable from "./OrdersTable";
-import { OrderData } from "./Models/ServerMessages";
+import WSConnector from "../../WSClient";
+import Ticker from "../Ticker/Ticker";
+import OrdersTable from "../OrdersTable/OrdersTable";
+import { OrderData } from "../../Models/ServerMessages";
+import { PlaceOrder } from "../../Models/ClientMessages";
 import Decimal from "decimal.js";
-import { PlaceOrder } from "./Models/ClientMessages";
 
 const App: React.FC = () => {
   const [orders, setOrders] = useState<OrderData[]>([]);
@@ -42,7 +41,7 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="App">
+    <div>
       <Ticker tickerPrices={tickerPrices} onOrderSubmit={handleOrderSubmit} />
       <OrdersTable orders={orders} />
     </div>

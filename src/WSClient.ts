@@ -10,9 +10,9 @@ import {
   ServerEnvelope,
   OrderDataMessage,
   MarketDataUpdate,
+  OrderData
 } from "./Models/ServerMessages";
 import { mockServerURL } from "./mocks/MockServer";
-import { OrderData } from "./OrdersTable";
 
 export default class WSConnector {
   connection: WebSocket | undefined;

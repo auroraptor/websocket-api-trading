@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { PlaceOrder } from "./Models/ClientMessages";
-import { OrderSide, Instrument } from "./Enums";
+import { PlaceOrder } from "../../Models/ClientMessages";
+import { OrderSide, Instrument } from "../../Enums";
 import Decimal from "decimal.js";
 
 import {

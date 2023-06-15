@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom";
 import { render, fireEvent, screen } from "@testing-library/react";
-import { mockTickerPrices } from "./mocks/mockTickerPrices";
-import { OrderSide, Instrument } from "./Enums";
+import { mockTickerPrices } from "../../mocks/mockTickerPrices";
+import { OrderSide, Instrument } from "../../Enums";
 import Decimal from "decimal.js";
 import Ticker from "./Ticker";
 

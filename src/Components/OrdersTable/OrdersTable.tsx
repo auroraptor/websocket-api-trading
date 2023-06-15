@@ -1,10 +1,9 @@
 import React from "react";
-import "./index.css";
 import { Table, Tag, Badge } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import Decimal from "decimal.js";
-import { Instrument, OrderSide, OrderStatus } from "./Enums";
-import { OrderData } from "./Models/ServerMessages";
+import { Instrument, OrderSide, OrderStatus } from "../../Enums";
+import { OrderData } from "../../Models/ServerMessages";
 
 const columns: ColumnsType<OrderData> = [
   {
