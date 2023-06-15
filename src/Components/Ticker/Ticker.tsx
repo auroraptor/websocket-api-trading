@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { PlaceOrder } from "../../Models/ClientMessages";
+import { TickerProps } from "./Tiker.types";
 import { OrderSide, Instrument } from "../../Enums";
 import Decimal from "decimal.js";
-
 import {
   Card,
   Select,
@@ -14,14 +13,6 @@ import {
 } from "antd";
 
 const { Text } = Typography;
-
-type TickerProps = {
-  tickerPrices: Record<
-    string,
-    { bid: Decimal; offer: Decimal; minAmount: Decimal; maxAmount: Decimal }
-  >;
-  onOrderSubmit: (order: PlaceOrder) => void;
-};
 
 const Ticker: React.FC<TickerProps> = ({ tickerPrices, onOrderSubmit }) => {
   const [loading, setLoading] = useState(true);

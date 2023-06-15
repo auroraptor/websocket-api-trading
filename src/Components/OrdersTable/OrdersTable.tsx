@@ -4,6 +4,7 @@ import type { ColumnsType } from "antd/es/table";
 import Decimal from "decimal.js";
 import { Instrument, OrderSide, OrderStatus } from "../../Enums";
 import { OrderData } from "../../Models/ServerMessages";
+import { OrdersTableProps } from "./OrdersTable.types";
 
 const columns: ColumnsType<OrderData> = [
   {
@@ -109,10 +110,6 @@ const columns: ColumnsType<OrderData> = [
     },
   },
 ];
-
-interface OrdersTableProps {
-  orders?: OrderData[];
-}
 
 const OrdersTable: React.FC<OrdersTableProps> = ({ orders }) => {
   if (!orders) {
