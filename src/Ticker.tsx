@@ -35,7 +35,7 @@ const Ticker: React.FC<TickerProps> = ({ tickerPrices, onOrderSubmit }) => {
   let buyPrice = selectedInstrument
     ? new Decimal(selectedInstrument.offer).toNumber()
     : 0;
-  let defaultVolume = selectedInstrument
+  let defaultAmount = selectedInstrument
     ? new Decimal(selectedInstrument.minAmount).toNumber()
     : 0;
   let minAmount = selectedInstrument
@@ -45,7 +45,7 @@ const Ticker: React.FC<TickerProps> = ({ tickerPrices, onOrderSubmit }) => {
     ? new Decimal(selectedInstrument.maxAmount).toNumber()
     : 1000000;
 
-  const [volume, setVolume] = useState<number>(defaultVolume);
+  const [amount, setAmount] = useState<number>(defaultAmount);
   const instruments = Object.keys(Instrument)
     .filter((key) => isNaN(Number(key)))
     .map((instrument) => ({
@@ -65,7 +65,7 @@ const Ticker: React.FC<TickerProps> = ({ tickerPrices, onOrderSubmit }) => {
 
   useEffect(() => {
     if (selectedInstrument) {
-      setVolume(new Decimal(selectedInstrument.minAmount).toNumber());
+      setAmount(new Decimal(selectedInstrument.minAmount).toNumber());
     }
   }, [selectedInstrument]);
 
@@ -74,7 +74,7 @@ const Ticker: React.FC<TickerProps> = ({ tickerPrices, onOrderSubmit }) => {
       onOrderSubmit({
         instrument: Instrument[currentInstrument as keyof typeof Instrument],
         side: side,
-        amount: new Decimal(volume),
+        amount: new Decimal(amount),
         price:
           side === OrderSide.sell
             ? new Decimal(sellPrice)
@@ -124,35 +124,15 @@ const Ticker: React.FC<TickerProps> = ({ tickerPrices, onOrderSubmit }) => {
         max={maxAmount}
         step={1000}
         size="large"
-        value={volume}
-        onChange={(value: number | null) => value !== null && setVolume(value)}
+        value={amount}
+        onChange={(value: number | null) => value !== null && setAmount(value)}
       />
       <Space align="center" size="large" split={<Divider type="vertical" />}>
-        <Text style={{ margin: 0, fontSize: "1rem", alignSelf: "center" }}>
-          {sellPrice && (
-            <>
-              {sellPrice.toFixed(3).split(".")[0] + "."}
-              <Text
-                style={{ margin: 0, fontSize: "2rem", alignSelf: "center" }}
-              >
-                {sellPrice.toFixed(3).split(".")[1]?.substring(0, 2)}
-              </Text>
-              {sellPrice.toFixed(3).split(".")[1]?.substring(2)}
-            </>
-          )}
+        <Text style={{ margin: 0, fontSize: "2rem", alignSelf: "center" }}>
+         {sellPrice.toFixed(3)}
         </Text>
-        <Text style={{ margin: 0, fontSize: "1rem", alignSelf: "center" }}>
-          {buyPrice && (
-            <>
-              {buyPrice.toFixed(3).split(".")[0] + "."}
-              <Text
-                style={{ margin: 0, fontSize: "2rem", alignSelf: "center" }}
-              >
-                {buyPrice.toFixed(3).split(".")[1]?.substring(0, 2)}
-              </Text>
-              {buyPrice.toFixed(3).split(".")[1]?.substring(2)}
-            </>
-          )}
+        <Text style={{ margin: 0, fontSize: "2rem", alignSelf: "center" }}>
+          {buyPrice.toFixed(3)}
         </Text>
       </Space>
     </Card>
