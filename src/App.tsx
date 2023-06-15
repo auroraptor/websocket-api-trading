@@ -7,7 +7,7 @@ import { OrderData } from "./OrdersTable";
 import Decimal from "decimal.js";
 import { PlaceOrder } from "./Models/ClientMessages";
 
-function App() {
+const App: React.FC = () => {
   const [orders, setOrders] = useState<OrderData[]>([]);
   const [wsConnector, setWsConnector] = useState<WSConnector | null>(null);
   const [tickerPrices, setTickerPrices] = useState<Record<string, { bid: Decimal, offer: Decimal, minAmount: Decimal, maxAmount: Decimal }>>({});
